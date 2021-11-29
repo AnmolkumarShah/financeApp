@@ -65,7 +65,7 @@ class Input {
   }
 
   Input.number({String? label = "Placeholder"}) {
-    _controller = TextEditingController(text: "");
+    _controller = TextEditingController(text: "0");
     _label = label;
     _inputType = TextInputType.number;
     _obscure = false;
@@ -102,6 +102,10 @@ class Input {
 
   String value() {
     return _controller!.value.text.trim();
+  }
+
+  String label() {
+    return _label!;
   }
 
   void setValue(String val) {

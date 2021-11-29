@@ -1,5 +1,8 @@
+import 'package:finance_app/Screens/dashboard.dart';
+import 'package:finance_app/Screens/earning_screen.dart';
 import 'package:finance_app/Screens/profile_master_screen.dart';
 import 'package:finance_app/Screens/quiz_screen.dart';
+import 'package:finance_app/Screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const QuizScreen(),
+      home: const Dashboard(),
     );
   }
 }

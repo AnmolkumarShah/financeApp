@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:finance_app/Helpers/show_snakebar.dart';
 import 'package:finance_app/Models/question_model.dart';
 import 'package:finance_app/Models/verdict.dart';
@@ -44,6 +42,11 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: InfiniteCarousel.builder(
           center: true,
@@ -77,6 +80,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     boxShadow: kElevationToShadow[2],
+                    color: Colors.blue,
                   ),
                   child: Column(
                     children: [
@@ -175,7 +179,7 @@ class Question extends StatelessWidget {
     return Container(
       child: Text(
         question!,
-        textAlign: TextAlign.justify,
+        textAlign: TextAlign.center,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w400,
@@ -216,7 +220,7 @@ class _AnswerState extends State<Answer> {
         },
         child: Card(
           color: widget.ans!.selected == true
-              ? Colors.blueAccent
+              ? Colors.redAccent
               : Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(8.0),

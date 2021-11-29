@@ -37,7 +37,9 @@ class _ProfileMasterScreenState extends State<ProfileMasterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Profile Master"),
+      ),
       body: Form(
         key: _form,
         child: ListView(
@@ -56,7 +58,10 @@ class _ProfileMasterScreenState extends State<ProfileMasterScreen> {
             _c1dob.builder(),
             _childName2.builder(),
             _c2dob.builder(),
-            ElevatedButton(onPressed: save, child: const Text("Save"))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(onPressed: save, child: const Text("Save")),
+            )
           ],
         ),
       ),
