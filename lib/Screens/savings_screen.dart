@@ -82,14 +82,14 @@ class _PieChartState extends State<PieChart> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SfCircularChart(
-      title: ChartTitle(text: 'Largest islands in the world'),
+      title: ChartTitle(text: 'Your Savings'),
       series: <PieSeries<_PieData, String>>[
         PieSeries<_PieData, String>(
             dataSource: widget.data,
             xValueMapper: (_PieData data, _) => data.xData,
             yValueMapper: (_PieData data, _) => data.yData,
             dataLabelMapper: (_PieData data, _) => data.xData,
-            radius: '65%',
+            radius: '55%',
             startAngle: 80,
             endAngle: 80,
             dataLabelSettings: const DataLabelSettings(

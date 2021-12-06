@@ -1,11 +1,13 @@
-import 'package:finance_app/Screens/dashboard.dart';
-import 'package:finance_app/Screens/earning_screen.dart';
-import 'package:finance_app/Screens/profile_master_screen.dart';
-import 'package:finance_app/Screens/quiz_screen.dart';
-import 'package:finance_app/Screens/welcome_screen.dart';
+import 'package:finance_app/Providers/main_provider.dart';
+import 'package:finance_app/Screens/loader_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.black));
   runApp(const MyApp());
 }
 
@@ -14,13 +16,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MainProvider(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const LoaderScreen(),
       ),
-      home: const Dashboard(),
     );
   }
 }

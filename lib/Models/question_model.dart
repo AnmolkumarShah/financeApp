@@ -20,6 +20,15 @@ class QuestionModel {
     int idx = options!.indexWhere((element) => element.isSelected());
     return idx;
   }
+
+  setAnswer(int id) {
+    print(id);
+    for (var element in options!) {
+      if (options!.indexOf(element) == id) {
+        element.select(true);
+      }
+    }
+  }
 }
 
 class Option {

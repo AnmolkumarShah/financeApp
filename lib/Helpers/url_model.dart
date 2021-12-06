@@ -9,7 +9,7 @@ class UrlGlobal {
 
   UrlGlobal({
     this.host = "http://167.114.35.29/sfs_api/bill.asmx/apierp",
-    this.p = "8",
+    this.p = "9",
     this.p1 = '0',
     this.p2 = "",
     this.last = "tblno=&cid=&yr=&xdt=&serno=",

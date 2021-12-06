@@ -1,5 +1,6 @@
 import 'package:finance_app/Helpers/date_format_from_data_base.dart';
 import 'package:finance_app/Helpers/field_cover.dart';
+import 'package:finance_app/Helpers/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,7 @@ class DateHelper extends StatefulWidget {
 }
 
 class _DateHelperState extends State<DateHelper> {
-  DateTime? _selectedDate;
+  DateTime? _selectedDate = DateTime(1900);
 
   DateTime value() {
     return _selectedDate!;
@@ -25,7 +26,7 @@ class _DateHelperState extends State<DateHelper> {
   @override
   void initState() {
     super.initState();
-    if (widget.givenDate != null) {
+    if (widget.givenDate != DateTime(1900)) {
       _selectedDate = widget.givenDate;
     }
   }
@@ -33,7 +34,7 @@ class _DateHelperState extends State<DateHelper> {
   @override
   Widget build(BuildContext context) {
     return fieldcover(
-      child: _selectedDate != null
+      child: _selectedDate != DateTime(1900)
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -41,9 +42,9 @@ class _DateHelperState extends State<DateHelper> {
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      _selectedDate = null;
+                      _selectedDate = DateTime(1900);
                     });
-                    widget.fun!(null);
+                    widget.fun!(DateTime(1900));
                   },
                   icon: const Icon(Icons.cancel),
                 ),
@@ -75,7 +76,7 @@ class _DateHelperState extends State<DateHelper> {
 }
 
 class MyDate {
-  DateTime? _value;
+  DateTime? _value = DateTime(1900);
   String? label;
 
   MyDate({this.label = 'Select Date'});
@@ -88,13 +89,17 @@ class MyDate {
     return _value!;
   }
 
+  String formatValue() {
+    return formateDate(value());
+  }
+
   setValue(String val) {
     DateTime date = onlyDateFromDataBase(val);
     _value = date;
   }
 
   bool isEmpty() {
-    return _value == null ? true : false;
+    return _value == DateTime(1900) ? true : false;
   }
 
   Widget builder() {
