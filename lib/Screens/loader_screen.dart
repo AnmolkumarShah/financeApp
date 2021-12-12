@@ -1,4 +1,5 @@
 import 'package:finance_app/Helpers/querie.dart';
+import 'package:finance_app/Helpers/show_snakebar.dart';
 import 'package:finance_app/Providers/main_provider.dart';
 import 'package:finance_app/Screens/dashboard.dart';
 import 'package:finance_app/Screens/welcome_screen.dart';
@@ -16,20 +17,27 @@ class LoaderScreen extends StatefulWidget {
 
 class _LoaderScreenState extends State<LoaderScreen> {
   start() async {
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
-    final int? id = prefs.getInt('id');
-    if (id != null) {
-      dynamic result = await Query.execute(
-          query: "select top 1 * from usr_mast where id = $id");
-      Provider.of<MainProvider>(context, listen: false).setData(result[0]);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Dashboard(),
-        ),
-      );
-    } else {
+    try {
+      final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await _prefs;
+      final int? id = prefs.getInt('id');
+      if (id != null) {
+        dynamic result = await Query.execute(
+            query: "select top 1 * from usr_mast where id = $id");
+        Provider.of<MainProvider>(context, listen: false).setData(result[0]);
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Dashboard(),
+          ),
+        );
+        showSnakeBar(context, "Welcome Back");
+      } else {
+        throw "Welcome";
+      }
+    } catch (e) {
+      showSnakeBar(context, "You Need To Login/Signup To Application");
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -54,7 +62,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logo.jpg'),
+            Image.asset('assets/logo.png'),
             const SizedBox(
               height: 10,
             ),

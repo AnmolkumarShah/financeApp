@@ -1,4 +1,3 @@
-import 'package:finance_app/Helpers/field_cover.dart';
 import 'package:flutter/material.dart';
 
 String display(dynamic e) {

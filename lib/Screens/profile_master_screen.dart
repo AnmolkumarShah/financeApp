@@ -30,10 +30,10 @@ class _ProfileMasterScreenState extends State<ProfileMasterScreen> {
   final Input _spousename = Input.notreq(label: "Spouse Name");
   final MyDate _spousedob = MyDate(label: "Spouse DOB");
 
-  final Input _childName1 = Input.notreq(label: "Chile 1 Name");
+  final Input _childName1 = Input.notreq(label: "Child 1 Name");
   final MyDate _c1dob = MyDate(label: "Child 1 DOB");
 
-  final Input _childName2 = Input.notreq(label: "Chile 2 Name");
+  final Input _childName2 = Input.notreq(label: "Child 2 Name");
   final MyDate _c2dob = MyDate(label: "Child 2 DOB");
 
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
@@ -71,6 +71,9 @@ class _ProfileMasterScreenState extends State<ProfileMasterScreen> {
               SharedPreferences.getInstance();
           final SharedPreferences prefs = await _prefs;
           await prefs.setInt('id', _id);
+          dynamic result = await Query.execute(
+              query: "select top 1 * from usr_mast where id = $_id");
+          Provider.of<MainProvider>(context, listen: false).setData(result[0]);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -163,13 +166,14 @@ class _ProfileMasterScreenState extends State<ProfileMasterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Form(
         key: _form,
         child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/logo.jpg'),
+              child: Image.asset('assets/logo.png'),
             ),
             const SizedBox(
               height: 20,

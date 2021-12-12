@@ -2,7 +2,6 @@ import 'package:finance_app/Screens/login_screen.dart';
 import 'package:finance_app/Screens/profile_master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -10,8 +9,6 @@ class WelcomeScreen extends StatefulWidget {
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
-
-
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
@@ -24,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            Image.asset('assets/logo.jpg'),
+            Image.asset('assets/logo.png'),
             const SizedBox(
               height: 10,
             ),
@@ -43,7 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  ProfileMasterScreen(),
+                    builder: (context) => ProfileMasterScreen(),
                   ),
                 );
               },

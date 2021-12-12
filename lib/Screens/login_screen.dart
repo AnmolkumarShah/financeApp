@@ -24,29 +24,39 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
 
   login() async {
-    setState(() {
-      loading = true;
-    });
-    if (_form.currentState!.validate()) {
-      dynamic result = await Query.execute(
-          query:
-              "select top 1 * from usr_mast where mobile = '${_id.value()}' and pwd = '${_pass.value()}'");
-      Provider.of<MainProvider>(context, listen: false).setData(result[0]);
-      final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await _prefs;
-      await prefs.setInt('id', result[0]['id']);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Dashboard(),
-        ),
-      );
-    } else {
-      showSnakeBar(context, "Please Fill All Fields Properly");
+    try {
+      setState(() {
+        loading = true;
+      });
+      if (_form.currentState!.validate()) {
+        List<dynamic> result = await Query.execute(
+            query:
+                "select top 1 * from usr_mast where mobile = '${_id.value()}' and pwd = '${_pass.value()}'");
+        if (result.isEmpty) {
+          throw "No User Found With This Number And Password";
+        }
+        Provider.of<MainProvider>(context, listen: false).setData(result[0]);
+        final Future<SharedPreferences> _prefs =
+            SharedPreferences.getInstance();
+        final SharedPreferences prefs = await _prefs;
+        await prefs.setInt('id', result[0]['id']);
+        Navigator.pop(context);
+        showSnakeBar(context, "Welcome " + result[0]['usr_nm']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Dashboard(),
+          ),
+        );
+      } else {
+        throw "Please Fill All Fields Properly";
+      }
+    } catch (e) {
+      showSnakeBar(context, e.toString());
+      setState(() {
+        loading = false;
+      });
     }
-    setState(() {
-      loading = false;
-    });
   }
 
   @override
@@ -65,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   key: _form,
                   child: Column(
                     children: [
-                      Image.asset('assets/logo.jpg'),
+                      Image.asset('assets/logo.png'),
                       const SizedBox(
                         height: 50,
                       ),

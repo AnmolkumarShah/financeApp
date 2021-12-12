@@ -8,10 +8,6 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnakeBar(
     SnackBar(
       content: Row(
         children: [
-          const Icon(
-            Icons.notification_important,
-            color: Colors.white,
-          ),
           const SizedBox(
             width: 20,
           ),
@@ -28,14 +24,10 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnakeBar(
           const SizedBox(
             width: 20,
           ),
-          const Icon(
-            Icons.notification_important,
-            color: Colors.white,
-          ),
         ],
       ),
       duration: const Duration(milliseconds: 4000),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.blue,
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
         vertical: 10,

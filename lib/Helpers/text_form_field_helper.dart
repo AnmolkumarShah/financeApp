@@ -104,12 +104,16 @@ class Input {
     return _controller!.value.text.trim();
   }
 
+  double valueInt() {
+    return double.parse(_controller!.value.text.trim());
+  }
+
   String label() {
     return _label!;
   }
 
   void setValue(String val) {
-    _controller = TextEditingController(text: val);
+    _controller = TextEditingController(text: val.split('.')[0]);
   }
 
   bool isEmpty() {

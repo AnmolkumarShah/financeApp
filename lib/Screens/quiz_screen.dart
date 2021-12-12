@@ -5,7 +5,9 @@ import 'package:finance_app/Helpers/show_snakebar.dart';
 import 'package:finance_app/Models/question_model.dart';
 import 'package:finance_app/Models/verdict.dart';
 import 'package:finance_app/Providers/main_provider.dart';
+import 'package:finance_app/Screens/quiz_given_screen.dart';
 import 'package:finance_app/Services/loader_services.dart';
+import 'package:finance_app/Services/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:provider/provider.dart';
@@ -40,40 +42,33 @@ class _QuizScreenState extends State<QuizScreen> {
   List<QuestionModel> allQue = allQustions;
   static int count = 0;
 
-  getSet() async {
-    if (count > 0) {
-      return;
-    }
+  initFunction() async {
+    if (count > 0) return;
     dynamic data = Provider.of<MainProvider>(context, listen: false).getData();
     int id = data['id'];
     List<dynamic> result = await Query.execute(
         query: 'select * from fianacial where Profile_id = $id');
     if (result.isNotEmpty) {
-      for (var i = 0; i < allQue[0].options!.length; i++) {
-        if (i == result[0]['Answer']) {
-          allQue[0].options![i].select(true);
-        }
+      showSnakeBar(context, "You Have Attended The Quiz Earlier");
+      bool res = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizGivenScreen(
+            response: result[0],
+          ),
+        ),
+      );
+      if (res == true) {
+        Navigator.pop(context);
       }
-
-      // allQue[0].setAnswer(result[0]['Answer']);
-      // allQue[1].setAnswer(result[0]['Answer1']);
-      // allQue[2].setAnswer(result[0]['Answer2']);
-      // allQue[3].setAnswer(result[0]['Answer3']);
-      // allQue[4].setAnswer(result[0]['Answer4']);
-      // allQue[5].setAnswer(result[0]['Answer5']);
-      // allQue[6].setAnswer(result[0]['Answer6']);
-      // allQue[7].setAnswer(result[0]['Answer7']);
-      // allQue[8].setAnswer(result[0]['Answer8']);
-      // allQue[9].setAnswer(result[0]['Answer9']);
-      count = 1;
-      setState(() {});
     }
+    count++;
   }
 
   @override
   void initState() {
     super.initState();
-    getSet();
+    count = 0;
     _controller = InfiniteScrollController(initialItem: _selectedIndex);
   }
 
@@ -99,6 +94,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   bool loading = false;
+  List<int> result = [0, 0, 0];
 
   Future<bool> save(List<QuestionModel> list) async {
     setState(() {
@@ -126,6 +122,7 @@ class _QuizScreenState extends State<QuizScreen> {
         Answer4 = ${list[4].finalAns()},Answer5 = ${list[5].finalAns()},
         Answer6 = ${list[6].finalAns()},Answer7 = ${list[7].finalAns()},
         Answer8 = ${list[8].finalAns()},Answer9 = ${list[9].finalAns()}
+        where profile_id = $id
         ''');
       }
       print(result);
@@ -148,142 +145,178 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: InfiniteCarousel.builder(
-          center: true,
-          loop: false,
-          itemCount: allQue.length,
-          itemExtent: _itemExtent!,
-          controller: _controller,
-          onIndexChanged: (index) {
-            if (_selectedIndex != index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            }
-            if (!allQue[_selectedIndex - 1].isAnswered) {
-              showSnakeBar(context, "Select Option Before proceeding");
-              _controller.previousItem();
-            }
-          },
-          itemBuilder: (context, itemIndex, realIndex) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                        Text("Question ${itemIndex + 1} of ${allQue.length}"),
-                  ),
-                ),
-                Container(
-                  // width: 300,
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: kElevationToShadow[2],
-                    color: Colors.blue,
-                  ),
-                  child: Column(
+      body: FutureBuilder(
+          future: initFunction(),
+          builder: (context, snapshot) {
+            return SafeArea(
+              child: InfiniteCarousel.builder(
+                center: true,
+                loop: false,
+                itemCount: allQue.length,
+                itemExtent: _itemExtent!,
+                controller: _controller,
+                onIndexChanged: (index) {
+                  if (_selectedIndex != index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  }
+                  if (!allQue[_selectedIndex - 1].isAnswered) {
+                    showSnakeBar(context, "Select Option Before proceeding");
+                    _controller.previousItem();
+                  }
+                },
+                itemBuilder: (context, itemIndex, realIndex) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Question(
-                        question: allQue[itemIndex].question,
+                      Card(
+                        elevation: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Question ${itemIndex + 1} of ${allQue.length}",
+                            style: MyTextStyle.simple,
+                          ),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: kElevationToShadow[2],
+                          color: Colors.blue,
+                        ),
+                        child: Column(
+                          children: [
+                            Question(
+                              question: allQue[itemIndex].question,
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            ...allQue[itemIndex]
+                                .options!
+                                .map((e) => Answer(
+                                      ans: e,
+                                      isAnswered: allQue[itemIndex].isAnswered,
+                                      fun: () =>
+                                          markAnswered(allQue[itemIndex]),
+                                      op: abc(allQue[itemIndex]
+                                          .options!
+                                          .indexOf(e)),
+                                    ))
+                                .toList(),
+                          ],
+                        ),
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 10,
                       ),
-                      ...allQue[itemIndex]
-                          .options!
-                          .map((e) => Answer(
-                                ans: e,
-                                isAnswered: allQue[itemIndex].isAnswered,
-                                fun: () => markAnswered(allQue[itemIndex]),
-                                op: abc(allQue[itemIndex].options!.indexOf(e)),
-                              ))
-                          .toList(),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton.icon(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        allQue[itemIndex].clearAll();
-                        setState(() {});
-                      },
-                      label: const Text("Clear"),
-                    ),
-                    TextButton.icon(
-                      icon: const Icon(Icons.navigate_next),
-                      onPressed: () {
-                        if (allQue[itemIndex].isAnswered) {
-                          _controller.nextItem();
-                        } else {
-                          showSnakeBar(
-                              context, "Select Option Before proceeding");
-                        }
-                      },
-                      label: const Text("Next"),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                itemIndex == allQue.length - 1
-                    ? loading == true
-                        ? Loader.circular
-                        : ElevatedButton(
-                            onPressed: () async {
-                              List<int> result = [0, 0, 0];
-                              for (var item in allQue) {
-                                final ans = item.finalAns();
-                                result[ans] += 1;
-                              }
-                              int temp = result.reduce(max);
-                              bool res = await save(allQue);
-                              if (res == true) {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return Container(
-                                      height: 500,
-                                      padding: const EdgeInsets.all(30),
-                                      child: Text(
-                                        verdict[result.indexOf(temp)]!,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 27,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton.icon(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              allQue[itemIndex].clearAll();
+                              setState(() {});
+                            },
+                            label: const Text("Clear"),
+                          ),
+                          TextButton.icon(
+                            icon: const Icon(Icons.navigate_next),
+                            onPressed: () {
+                              if (allQue[itemIndex].isAnswered) {
+                                _controller.nextItem();
                               } else {
                                 showSnakeBar(
-                                    context, "Error In Saving Answers");
+                                    context, "Select Option Before proceeding");
                               }
                             },
-                            child: const Text("Show Result"),
-                          )
-                    : const SizedBox(
-                        height: 0,
-                      )
-              ],
+                            label: const Text("Next"),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      itemIndex == allQue.length - 1
+                          ? loading == true
+                              ? Loader.circular
+                              : ElevatedButton(
+                                  onPressed: () async {
+                                    for (var item in allQue) {
+                                      final ans = item.finalAns();
+                                      result[ans] += 1;
+                                    }
+                                    int temp = result.reduce(max);
+                                    bool res = await save(allQue);
+                                    if (res == true) {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) {
+                                          return Container(
+                                            height: 500,
+                                            padding: const EdgeInsets.all(30),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  verdict[
+                                                      result.indexOf(temp)]!,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 27,
+                                                  ),
+                                                ),
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          AlertDialog(
+                                                        content: ListTile(
+                                                          title: const Text(
+                                                              "Your Selected Answer Count"),
+                                                          subtitle: Text(
+                                                            "Option A : ${result[0]}\nOption B : ${result[1]}\nOption C : ${result[2]}",
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.info_outline),
+                                                  label: const Text("More"),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      showSnakeBar(
+                                          context, "Error In Saving Answers");
+                                    }
+                                  },
+                                  child: const Text("Show Result"),
+                                )
+                          : const SizedBox(
+                              height: 0,
+                            )
+                    ],
+                  );
+                },
+              ),
             );
-          },
-        ),
-      ),
+          }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pop(context);
@@ -292,7 +325,7 @@ class _QuizScreenState extends State<QuizScreen> {
           mainAxisSize: MainAxisSize.min,
           children: const [
             Icon(Icons.cancel),
-            Text("Cancel Quiz"),
+            Text("Close Quiz"),
           ],
         ),
       ),
@@ -306,15 +339,13 @@ class Question extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        question!,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w400,
-          fontSize: 20,
-        ),
+    return Text(
+      question!,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w400,
+        fontSize: 20,
       ),
     );
   }
@@ -366,21 +397,25 @@ class _AnswerState extends State<Answer> {
             const SizedBox(
               width: 10,
             ),
-            Container(
-              width: 230,
-              color: widget.ans!.selected == true
-                  ? Colors.redAccent
-                  : Colors.black54,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.ans!.statement!,
-                  maxLines: 10,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: widget.ans!.selected == true
+                      ? Colors.redAccent
+                      : Colors.black54,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.ans!.statement!,
+                    maxLines: 10,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
