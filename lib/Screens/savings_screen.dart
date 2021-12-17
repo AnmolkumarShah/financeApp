@@ -135,7 +135,6 @@ class _SavingScreenState extends State<SavingScreen> {
     int id = data['id'];
     res = await Query.execute(
         query: 'select top 1 * from savings where Profile_id = $id');
-    print(res);
     if (res!.isNotEmpty) {
       cash_bank.setValue(res![0]['amt'].toString());
       bond_gov.setValue(res![0]['bonds'].toString());
@@ -158,6 +157,30 @@ class _SavingScreenState extends State<SavingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<_PieData> data = [
+      _PieData(cash_bank.label(), double.parse(cash_bank.value())),
+      _PieData(bond_gov.label(), double.parse(bond_gov.value())),
+      _PieData(mutualfunds.label(), double.parse(mutualfunds.value())),
+      _PieData(fd_rd.label(), double.parse(fd_rd.value())),
+      _PieData(ppf_epf.label(), double.parse(ppf_epf.value())),
+      _PieData(insurance.label(), double.parse(insurance.value())),
+      _PieData(equity_share.label(), double.parse(equity_share.value())),
+      _PieData(real_estate.label(), double.parse(real_estate.value())),
+      _PieData(gold.label(), double.parse(gold.value())),
+      _PieData(other.label(), double.parse(other.value())),
+    ];
+    openModel(dynamic data) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return PieChart(
+            data: data,
+            totalValue: totalValue(),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Savings"),
@@ -185,43 +208,26 @@ class _SavingScreenState extends State<SavingScreen> {
                   child: loading == true
                       ? Loader.circular
                       : isUpdateon == true
-                          ? ElevatedButton.icon(
-                              onPressed: () async {
-                                await update();
-                                List<_PieData> data = [
-                                  _PieData(cash_bank.label(),
-                                      double.parse(cash_bank.value())),
-                                  _PieData(bond_gov.label(),
-                                      double.parse(bond_gov.value())),
-                                  _PieData(mutualfunds.label(),
-                                      double.parse(mutualfunds.value())),
-                                  _PieData(fd_rd.label(),
-                                      double.parse(fd_rd.value())),
-                                  _PieData(ppf_epf.label(),
-                                      double.parse(ppf_epf.value())),
-                                  _PieData(insurance.label(),
-                                      double.parse(insurance.value())),
-                                  _PieData(equity_share.label(),
-                                      double.parse(equity_share.value())),
-                                  _PieData(real_estate.label(),
-                                      double.parse(real_estate.value())),
-                                  _PieData(
-                                      gold.label(), double.parse(gold.value())),
-                                  _PieData(other.label(),
-                                      double.parse(other.value())),
-                                ];
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return PieChart(
-                                      data: data,
-                                      totalValue: totalValue(),
-                                    );
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    await update();
+
+                                    openModel(data);
                                   },
-                                );
-                              },
-                              label: const Text("Update"),
-                              icon: const Icon(Icons.system_update_alt),
+                                  label: const Text("Update"),
+                                  icon: const Icon(Icons.system_update_alt),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    openModel(data);
+                                  },
+                                  label: const Text("Show Graph"),
+                                  icon: const Icon(Icons.auto_graph_rounded),
+                                ),
+                              ],
                             )
                           : ElevatedButton.icon(
                               onPressed: () async {
@@ -283,6 +289,42 @@ class _PieChartState extends State<PieChart> {
     return ((double.parse(val) / widget.totalValue!) * 100).round();
   }
 
+  Widget showGraph() {
+    try {
+      return SfCircularChart(
+        title: ChartTitle(text: 'Your Savings Chart'),
+        series: <PieSeries<_PieData, String>>[
+          PieSeries<_PieData, String>(
+            dataSource: widget.data,
+            strokeWidth: 1,
+            strokeColor: Colors.black,
+            xValueMapper: (_PieData data, _) => data.xData,
+            yValueMapper: (_PieData data, _) => data.yData,
+            dataLabelMapper: (_PieData data, _) =>
+                "${perc(data.yData.toString())}% " + data.xData,
+            radius: '75%',
+            startAngle: 80,
+            endAngle: 80,
+            groupMode: CircularChartGroupMode.value,
+            dataLabelSettings: const DataLabelSettings(
+              showZeroValue: false,
+              isVisible: true,
+              labelIntersectAction: LabelIntersectAction.shift,
+              labelPosition: ChartDataLabelPosition.outside,
+              borderRadius: 5,
+              connectorLineSettings:
+                  ConnectorLineSettings(type: ConnectorType.curve),
+            ),
+          )
+        ],
+        tooltipBehavior: TooltipBehavior(enable: true),
+      );
+    } catch (e) {
+      return Text(
+          "You May Have Entered Value In Incorrect Format, Please Check");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -292,34 +334,7 @@ class _PieChartState extends State<PieChart> {
             title: const Text("Total Saving"),
             subtitle: Text(widget.totalValue.toString()),
           ),
-          SfCircularChart(
-            title: ChartTitle(text: 'Your Savings Chart'),
-            series: <PieSeries<_PieData, String>>[
-              PieSeries<_PieData, String>(
-                dataSource: widget.data,
-                strokeWidth: 1,
-                strokeColor: Colors.black,
-                xValueMapper: (_PieData data, _) => data.xData,
-                yValueMapper: (_PieData data, _) => data.yData,
-                dataLabelMapper: (_PieData data, _) =>
-                    "${perc(data.yData.toString())}% " + data.xData,
-                radius: '75%',
-                startAngle: 80,
-                endAngle: 80,
-                groupMode: CircularChartGroupMode.value,
-                dataLabelSettings: const DataLabelSettings(
-                  showZeroValue: false,
-                  isVisible: true,
-                  labelIntersectAction: LabelIntersectAction.shift,
-                  labelPosition: ChartDataLabelPosition.outside,
-                  borderRadius: 5,
-                  connectorLineSettings:
-                      ConnectorLineSettings(type: ConnectorType.curve),
-                ),
-              )
-            ],
-            tooltipBehavior: TooltipBehavior(enable: true),
-          ),
+          showGraph(),
         ],
       ),
     );

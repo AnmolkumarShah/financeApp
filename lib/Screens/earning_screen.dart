@@ -186,6 +186,60 @@ class _EarningScreenState extends State<EarningScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<_ChartData> data = [
+      _ChartData(
+        selectedYr1!.year.toString(),
+        double.parse(_amt1.value()),
+      ),
+      _ChartData(
+        selectedYr2!.year.toString(),
+        double.parse(_amt2.value()),
+      ),
+      _ChartData(
+        selectedYr3!.year.toString(),
+        double.parse(_amt3.value()),
+      ),
+      _ChartData(
+        selectedYr4!.year.toString(),
+        double.parse(_amt4.value()),
+      ),
+      _ChartData(
+        selectedYr5!.year.toString(),
+        double.parse(_amt5.value()),
+      ),
+      _ChartData(
+        selectedYr6!.year.toString(),
+        double.parse(_amt6.value()),
+      ),
+      _ChartData(
+        selectedYr7!.year.toString(),
+        double.parse(_amt7.value()),
+      ),
+      _ChartData(
+        selectedYr8!.year.toString(),
+        double.parse(_amt8.value()),
+      ),
+      _ChartData(
+        selectedYr9!.year.toString(),
+        double.parse(_amt9.value()),
+      ),
+      _ChartData(
+        selectedYr10!.year.toString(),
+        double.parse(_amt10.value()),
+      ),
+    ];
+
+    showGraph() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return BarGraph(
+            data: data,
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Earning"),
@@ -334,62 +388,26 @@ class _EarningScreenState extends State<EarningScreen> {
                     child: loading == true
                         ? Loader.circular
                         : isUpdateon == true
-                            ? ElevatedButton.icon(
-                                onPressed: () async {
-                                  await update();
-                                  List<_ChartData> data = [
-                                    _ChartData(
-                                      selectedYr1!.year.toString(),
-                                      double.parse(_amt1.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr2!.year.toString(),
-                                      double.parse(_amt2.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr3!.year.toString(),
-                                      double.parse(_amt3.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr4!.year.toString(),
-                                      double.parse(_amt4.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr5!.year.toString(),
-                                      double.parse(_amt5.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr6!.year.toString(),
-                                      double.parse(_amt6.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr7!.year.toString(),
-                                      double.parse(_amt7.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr8!.year.toString(),
-                                      double.parse(_amt8.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr9!.year.toString(),
-                                      double.parse(_amt9.value()),
-                                    ),
-                                    _ChartData(
-                                      selectedYr10!.year.toString(),
-                                      double.parse(_amt10.value()),
-                                    ),
-                                  ];
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return BarGraph(
-                                        data: data,
-                                      );
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      await update();
+                                      showGraph();
                                     },
-                                  );
-                                },
-                                icon: const Icon(Icons.system_update_alt),
-                                label: const Text("Update"),
+                                    icon: const Icon(Icons.system_update_alt),
+                                    label: const Text("Update"),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      showGraph();
+                                    },
+                                    icon: const Icon(Icons.auto_graph),
+                                    label: const Text("Show Graph"),
+                                  ),
+                                ],
                               )
                             : ElevatedButton.icon(
                                 onPressed: () async {

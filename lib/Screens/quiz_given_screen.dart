@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:finance_app/Models/question_model.dart';
 import 'package:finance_app/Models/verdict.dart';
+import 'package:finance_app/Screens/quiz_screen.dart';
 import 'package:flutter/material.dart';
 
 class QuizGivenScreen extends StatefulWidget {
@@ -61,6 +62,14 @@ class _QuizGivenScreenState extends State<QuizGivenScreen> {
             ),
             onPressed: () {
               Navigator.pop(context, false);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(
+                    isNew: true,
+                  ),
+                ),
+              );
             },
             label: const Text(
               "Attempt Quiz Again",

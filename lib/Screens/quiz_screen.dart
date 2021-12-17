@@ -28,7 +28,8 @@ abc(int idx) {
 }
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({Key? key}) : super(key: key);
+  bool isNew = false;
+  QuizScreen({Key? key, this.isNew = false}) : super(key: key);
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -48,9 +49,10 @@ class _QuizScreenState extends State<QuizScreen> {
     int id = data['id'];
     List<dynamic> result = await Query.execute(
         query: 'select * from fianacial where Profile_id = $id');
-    if (result.isNotEmpty) {
+    if (result.isNotEmpty && !widget.isNew) {
       showSnakeBar(context, "You Have Attended The Quiz Earlier");
-      bool res = await Navigator.push(
+      Navigator.pop(context);
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => QuizGivenScreen(
@@ -58,9 +60,6 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ),
       );
-      if (res == true) {
-        Navigator.pop(context);
-      }
     }
     count++;
   }

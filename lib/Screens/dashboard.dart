@@ -4,6 +4,7 @@ import 'package:finance_app/Helpers/show_snakebar.dart';
 import 'package:finance_app/Providers/main_provider.dart';
 import 'package:finance_app/Screens/earning_screen.dart';
 import 'package:finance_app/Screens/login_screen.dart';
+import 'package:finance_app/Screens/personal_balance_sheet.dart';
 import 'package:finance_app/Screens/profile_master_screen.dart';
 import 'package:finance_app/Screens/quiz_screen.dart';
 import 'package:finance_app/Screens/savings_screen.dart';
@@ -99,7 +100,7 @@ class Dashboard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const QuizScreen(),
+                  builder: (context) => QuizScreen(),
                   // builder: (context) => const QuizGivenScreen(),
                 ),
               );
@@ -125,6 +126,18 @@ class Dashboard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => SavingScreen(),
+                ),
+              );
+            },
+          ),
+          dashboard_tile(
+            icondata: Icons.account_balance,
+            label: "Personal Balance Sheet",
+            fun: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PersonalBalanceSheet(),
                 ),
               );
             },

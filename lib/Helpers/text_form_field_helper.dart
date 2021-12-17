@@ -10,6 +10,7 @@ class TextFormHelper extends StatelessWidget {
     this.controller,
     this.type,
     this.validator,
+    this.enable = true,
   }) : super(key: key);
 
   final String? label;
@@ -18,9 +19,12 @@ class TextFormHelper extends StatelessWidget {
   final TextInputType? type;
   final dynamic validator;
 
+  final bool enable;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enable,
       validator: validator,
       controller: controller,
       obscureText: obscure!,
@@ -39,6 +43,8 @@ class Input {
   TextInputType? _inputType;
   bool? _obscure;
   dynamic validator;
+
+  bool enable = true;
 
   Input({String? label = "Placeholder"}) {
     _controller = TextEditingController(text: "");
@@ -88,6 +94,15 @@ class Input {
     validator = ValidationBuilder().email().required().build();
   }
 
+  Input.nonMutable({String? label = "Placeholder"}) {
+    _controller = TextEditingController(text: "");
+    _label = label;
+    _inputType = TextInputType.text;
+    _obscure = false;
+    validator = null;
+    enable = false;
+  }
+
   Widget builder() {
     return fieldcover(
       child: TextFormHelper(
@@ -96,6 +111,7 @@ class Input {
         obscure: _obscure,
         type: _inputType,
         validator: validator,
+        enable: enable,
       ),
     );
   }
@@ -105,6 +121,7 @@ class Input {
   }
 
   double valueInt() {
+    if (_controller!.value.text == '') return 0;
     return double.parse(_controller!.value.text.trim());
   }
 
@@ -112,8 +129,13 @@ class Input {
     return _label!;
   }
 
-  void setValue(String val) {
+  void setValue(dynamic val) {
+    val = val.toString();
     _controller = TextEditingController(text: val.split('.')[0]);
+  }
+
+  TextEditingController getController() {
+    return _controller!;
   }
 
   bool isEmpty() {
