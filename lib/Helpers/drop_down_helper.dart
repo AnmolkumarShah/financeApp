@@ -52,10 +52,13 @@ class RowMaker extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: two!,
+        ),
         Expanded(
           child: one!,
         ),
-        two!,
       ],
     );
   }

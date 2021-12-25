@@ -2,7 +2,7 @@ import 'package:finance_app/Helpers/field_cover.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
 
-class TextFormHelper extends StatelessWidget {
+class TextFormHelper extends StatefulWidget {
   const TextFormHelper({
     Key? key,
     this.label,
@@ -22,16 +22,24 @@ class TextFormHelper extends StatelessWidget {
   final bool enable;
 
   @override
+  State<TextFormHelper> createState() => _TextFormHelperState();
+}
+
+class _TextFormHelperState extends State<TextFormHelper> {
+  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: enable,
-      validator: validator,
-      controller: controller,
-      obscureText: obscure!,
-      keyboardType: type,
-      decoration: InputDecoration(
-        label: Text(label!),
-        border: InputBorder.none,
+    return FocusScope(
+      child: TextFormField(
+        textAlign: TextAlign.end,
+        enabled: widget.enable,
+        validator: widget.validator,
+        controller: widget.controller,
+        obscureText: widget.obscure!,
+        keyboardType: widget.type,
+        decoration: InputDecoration(
+          label: Text(widget.label!),
+          border: InputBorder.none,
+        ),
       ),
     );
   }

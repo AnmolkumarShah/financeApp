@@ -20,10 +20,12 @@ class _LoaderScreenState extends State<LoaderScreen> {
     try {
       final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
       final SharedPreferences prefs = await _prefs;
-      final int? id = prefs.getInt('id');
+      final String? id = prefs.getString('id');
+      final String? pass = prefs.getString('pass');
       if (id != null) {
         dynamic result = await Query.execute(
-            query: "select top 1 * from usr_mast where id = $id");
+            query:
+                "select top 1 * from usr_mast where mobile = $id and pwd = $pass");
         Provider.of<MainProvider>(context, listen: false).setData(result[0]);
         Navigator.pop(context);
         Navigator.push(
@@ -38,6 +40,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
       }
     } catch (e) {
       showSnakeBar(context, "You Need To Login/Signup To Application");
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(

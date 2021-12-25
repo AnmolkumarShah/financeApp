@@ -75,6 +75,10 @@ class ChildMarriage extends ForChild {
             widget: currInvestmentValue.builder(),
             callback: functionOnAmount,
           ),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

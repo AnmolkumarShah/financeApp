@@ -73,6 +73,10 @@ class ForChild extends BalanceModel {
             widget: currInvestmentValue.builder(),
             callback: functionOnAmount,
           ),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

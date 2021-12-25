@@ -1,5 +1,5 @@
 import 'package:finance_app/Screens/login_screen.dart';
-import 'package:finance_app/Screens/profile_master_screen.dart';
+import 'package:finance_app/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 
@@ -40,7 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileMasterScreen(),
+                    builder: (context) => SignUpScreen(),
                   ),
                 );
               },

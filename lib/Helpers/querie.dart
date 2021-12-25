@@ -20,6 +20,7 @@ class Query {
       try {
         data = json.decode(result.body) as List<dynamic>;
       } catch (e) {
+        print(e);
         data = json.decode(result.body);
       }
       return data;

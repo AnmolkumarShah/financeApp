@@ -38,7 +38,14 @@ class _DateHelperState extends State<DateHelper> {
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(DateFormat.yMMMMEEEEd().format(_selectedDate!)),
+                _selectedDate != null
+                    ? Text(DateFormat.yMMMMEEEEd().format(_selectedDate!))
+                    : Text(
+                        "Please Select Proper Date",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 IconButton(
                   onPressed: () {
                     setState(() {

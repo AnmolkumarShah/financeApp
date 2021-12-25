@@ -155,21 +155,47 @@ class _SavingScreenState extends State<SavingScreen> {
     }
   }
 
+  bool check() {
+    if (cash_bank.isEmpty() ||
+        bond_gov.isEmpty() ||
+        mutualfunds.isEmpty() ||
+        fd_rd.isEmpty() ||
+        ppf_epf.isEmpty() ||
+        insurance.isEmpty() ||
+        equity_share.isEmpty() ||
+        real_estate.isEmpty() ||
+        gold.isEmpty() ||
+        other.isEmpty()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<_PieData> data = [
-      _PieData(cash_bank.label(), double.parse(cash_bank.value())),
-      _PieData(bond_gov.label(), double.parse(bond_gov.value())),
-      _PieData(mutualfunds.label(), double.parse(mutualfunds.value())),
-      _PieData(fd_rd.label(), double.parse(fd_rd.value())),
-      _PieData(ppf_epf.label(), double.parse(ppf_epf.value())),
-      _PieData(insurance.label(), double.parse(insurance.value())),
-      _PieData(equity_share.label(), double.parse(equity_share.value())),
-      _PieData(real_estate.label(), double.parse(real_estate.value())),
-      _PieData(gold.label(), double.parse(gold.value())),
-      _PieData(other.label(), double.parse(other.value())),
-    ];
+    Future.delayed(Duration.zero, () {
+      if (count > 0) return Future(() async {});
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text(
+            "Add your Present Saving As On Date",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Close"),
+            )
+          ],
+        ),
+      );
+    });
+
     openModel(dynamic data) {
+      setState(() {});
       showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -189,7 +215,7 @@ class _SavingScreenState extends State<SavingScreen> {
           future: init(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Loader.circular;
+              return Loader.shimmer;
             }
             return ListView(
               children: [
@@ -213,16 +239,69 @@ class _SavingScreenState extends State<SavingScreen> {
                               children: [
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    await update();
-
-                                    openModel(data);
+                                    if (check() == true) {
+                                      await update();
+                                      List<_PieData> data = [
+                                        _PieData(cash_bank.label(),
+                                            double.parse(cash_bank.value())),
+                                        _PieData(bond_gov.label(),
+                                            double.parse(bond_gov.value())),
+                                        _PieData(mutualfunds.label(),
+                                            double.parse(mutualfunds.value())),
+                                        _PieData(fd_rd.label(),
+                                            double.parse(fd_rd.value())),
+                                        _PieData(ppf_epf.label(),
+                                            double.parse(ppf_epf.value())),
+                                        _PieData(insurance.label(),
+                                            double.parse(insurance.value())),
+                                        _PieData(equity_share.label(),
+                                            double.parse(equity_share.value())),
+                                        _PieData(real_estate.label(),
+                                            double.parse(real_estate.value())),
+                                        _PieData(gold.label(),
+                                            double.parse(gold.value())),
+                                        _PieData(other.label(),
+                                            double.parse(other.value())),
+                                      ];
+                                      openModel(data);
+                                    } else {
+                                      showSnakeBar(context,
+                                          "Please Enter 0 in fields which are not applicable dont left them empty");
+                                    }
                                   },
                                   label: const Text("Update"),
                                   icon: const Icon(Icons.system_update_alt),
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    openModel(data);
+                                    if (check() == true) {
+                                      List<_PieData> data = [
+                                        _PieData(cash_bank.label(),
+                                            double.parse(cash_bank.value())),
+                                        _PieData(bond_gov.label(),
+                                            double.parse(bond_gov.value())),
+                                        _PieData(mutualfunds.label(),
+                                            double.parse(mutualfunds.value())),
+                                        _PieData(fd_rd.label(),
+                                            double.parse(fd_rd.value())),
+                                        _PieData(ppf_epf.label(),
+                                            double.parse(ppf_epf.value())),
+                                        _PieData(insurance.label(),
+                                            double.parse(insurance.value())),
+                                        _PieData(equity_share.label(),
+                                            double.parse(equity_share.value())),
+                                        _PieData(real_estate.label(),
+                                            double.parse(real_estate.value())),
+                                        _PieData(gold.label(),
+                                            double.parse(gold.value())),
+                                        _PieData(other.label(),
+                                            double.parse(other.value())),
+                                      ];
+                                      openModel(data);
+                                    } else {
+                                      showSnakeBar(context,
+                                          "Please Enter 0 in fields which are not applicable dont left them empty");
+                                    }
                                   },
                                   label: const Text("Show Graph"),
                                   icon: const Icon(Icons.auto_graph_rounded),

@@ -64,6 +64,10 @@ class PersonalLoans extends BalanceModel {
           value.builder(),
           assets.builder(),
           asset_value.builder(),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

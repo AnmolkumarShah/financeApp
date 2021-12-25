@@ -16,6 +16,10 @@ class Expenses extends BalanceModel {
     return val;
   }
 
+  double totalRequirement() {
+    return expenses.valueInt() * 200;
+  }
+
   bool canNew() {
     return isNew;
   }
@@ -65,6 +69,15 @@ class Expenses extends BalanceModel {
           value.builder(),
           rep_assets.builder(),
           asset_value.builder(),
+          ListTile(
+            title: Text("Total Requirement"),
+            subtitle: const Text("Monthly Expenses * 200"),
+            trailing: Text(totalRequirement().toString()),
+          ),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

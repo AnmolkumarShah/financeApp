@@ -7,6 +7,12 @@ class Loader {
     child: CircularProgressIndicator(),
   );
 
+  static Widget circularWhite = const Center(
+    child: CircularProgressIndicator(
+      color: Colors.white,
+    ),
+  );
+
   static Widget linear = const Center(
     child: LinearProgressIndicator(),
   );
@@ -23,19 +29,10 @@ class MyShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          child: const Text(
-            "ListTileShimmer ( onlyWithProfilePicture:true )",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
         Row(
           children: const [
             ListTileShimmer(
-              bgColor: Colors.yellow,
+              bgColor: Colors.blue,
               onlyShowProfilePicture: true,
               // isRectBox: true,
               height: 20,
@@ -52,7 +49,7 @@ class MyShimmer extends StatelessWidget {
           ),
         ),
         const ListTileShimmer(
-          bgColor: Colors.pink,
+          bgColor: Colors.blue,
 
           height: 20,
           // isPurplishMode: true,

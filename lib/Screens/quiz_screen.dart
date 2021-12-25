@@ -143,6 +143,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      if (count > 0 && !widget.isNew) return Future(() async {});
+      showSnakeBar(context, "You Can Swipe Right To Move To Next Question");
+    });
     return Scaffold(
       body: FutureBuilder(
           future: initFunction(),

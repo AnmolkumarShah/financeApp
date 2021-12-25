@@ -98,11 +98,10 @@ class _PersonalBalanceSheetState extends State<PersonalBalanceSheet> {
         showSnakeBar(context, "Please Try Again After Some Time");
       }
     } else {
-      showSnakeBar(context, "Ready To Go");
-
       list.forEach((element) {
         element.setValue(result[0]);
       });
+      showSnakeBar(context, "Ready To Go");
       setState(() {
         isUpdate = true;
         res = result;
@@ -138,6 +137,14 @@ class _PersonalBalanceSheetState extends State<PersonalBalanceSheet> {
     });
   }
 
+  String totalCalculation() {
+    double temp = 0;
+    list.forEach((element) {
+      temp += element.calculate();
+    });
+    return temp.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,12 +163,23 @@ class _PersonalBalanceSheetState extends State<PersonalBalanceSheet> {
                 controller: _controller,
                 onIndexChanged: (index) {
                   // list[_controller.selectedItem].save(1);
+                  setState(() {});
                 },
                 itemBuilder: (context, itemIndex, realIndex) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       list[itemIndex].builder(),
+                      itemIndex == list.length - 1
+                          ? Card(
+                              child: ListTile(
+                                leading: Text("Total Deficit / Surplus"),
+                                trailing: Text(totalCalculation()),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 0,
+                            ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

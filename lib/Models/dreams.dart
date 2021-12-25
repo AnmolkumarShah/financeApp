@@ -32,7 +32,7 @@ class Dreams extends BalanceModel {
   bool isNew = true;
 
   double calculate() {
-    double val = value.valueInt() - value.valueInt();
+    double val = other_dream.valueInt() - value.valueInt();
     return val;
   }
 
@@ -95,6 +95,10 @@ class Dreams extends BalanceModel {
           value.builder(),
           assets.builder(),
           other_dream.builder(),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

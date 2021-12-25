@@ -60,6 +60,10 @@ class ParentWell extends BalanceModel {
           value.builder(),
           rep_assets.builder(),
           asset_value.builder(),
+          ListTile(
+            leading: Text("Deficit / Surplus"),
+            trailing: Text(calculate().toString()),
+          ),
         ],
       ),
     );

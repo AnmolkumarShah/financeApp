@@ -39,7 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
         final Future<SharedPreferences> _prefs =
             SharedPreferences.getInstance();
         final SharedPreferences prefs = await _prefs;
-        await prefs.setInt('id', result[0]['id']);
+        //
+        await prefs.setString('id', _id.value());
+        await prefs.setString('pass', _pass.value());
+        //
         Navigator.pop(context);
         showSnakeBar(context, "Welcome " + result[0]['usr_nm']);
         Navigator.push(
