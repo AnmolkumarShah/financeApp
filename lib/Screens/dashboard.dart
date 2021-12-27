@@ -35,7 +35,7 @@ class Dashboard extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  "Profile Not Compleated!!!",
+                  "Profile Not Completed!!!",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

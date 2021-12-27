@@ -65,7 +65,12 @@ class Expenses extends BalanceModel {
               style: style,
             ),
           ),
-          expenses.builder(),
+          FocusScope(
+            onFocusChange: (b) {
+              value.setValue(totalRequirement());
+            },
+            child: expenses.builder(),
+          ),
           value.builder(),
           rep_assets.builder(),
           asset_value.builder(),

@@ -98,11 +98,11 @@ class _QuizGivenScreenState extends State<QuizGivenScreen> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 27,
+                    fontSize: 20,
                     color: Colors.white,
                   ),
                 ),
-                ElevatedButton.icon(
+                TextButton.icon(
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -119,8 +119,14 @@ class _QuizGivenScreenState extends State<QuizGivenScreen> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.info_outline),
-                  label: const Text("More"),
+                  icon: const Icon(
+                    Icons.info_outline,
+                    color: Colors.black,
+                  ),
+                  label: const Text(
+                    "More",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ],
             ),
