@@ -119,6 +119,7 @@ class _PersonalBalanceSheetState extends State<PersonalBalanceSheet> {
 
     for (int i = 0; i < list.length; i++) {
       dynamic res = await Query.execute(p1: '1', query: list[i].save(id));
+      print(res);
       if (res['status'] != 'success') {
         finl = false;
       }

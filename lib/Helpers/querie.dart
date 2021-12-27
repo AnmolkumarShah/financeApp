@@ -17,13 +17,12 @@ class Query {
       final url = urlObject.getUrl();
       var result = await Network.get(url);
       dynamic data;
-      print(result.body);
       if (result.body == "") throw "No User Found";
       try {
         data = json.decode(result.body) as List<dynamic>;
       } catch (e) {
         data = json.decode(result.body);
-        rethrow;
+        return data;
       }
       return data;
     } catch (e) {
